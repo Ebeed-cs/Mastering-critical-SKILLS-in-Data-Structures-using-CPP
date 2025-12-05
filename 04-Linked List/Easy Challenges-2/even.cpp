@@ -2,27 +2,33 @@
 #include <cassert>
 #include <vector>
 
-struct Node {
-    int data{ };
-    Node* next{ };
+struct Node
+{
+    int data{};
+    Node *next{};
     Node(int data) : data(data) {}
-    ~Node() {
+    ~Node()
+    {
         std::cout << "Destroy value: " << data << " at address " << this << "\n";
     }
 };
 
-class LinkedList {
+class LinkedList
+{
 private:
-    Node* head{};
-    Node* tail{};
+    Node *head{};
+    Node *tail{};
     int length{};
+
 public:
     LinkedList() = default;
 
-    void insert(int val) {
-        Node* node = new Node(val);
+    void insert(int val)
+    {
+        Node *node = new Node(val);
         length++;
-        if (head == nullptr) {
+        if (head == nullptr)
+        {
             head = tail = node;
             return;
         }
@@ -30,12 +36,15 @@ public:
         tail = node;
     }
 
-    void debug_verify_data_integrity() {
-        if (length == 0) {
+    void debug_verify_data_integrity()
+    {
+        if (length == 0)
+        {
             assert(head == nullptr);
             assert(tail == nullptr);
         }
-        else {
+        else
+        {
             assert(head != nullptr);
             assert(tail != nullptr);
             if (length == 1)
@@ -45,15 +54,17 @@ public:
             assert(!tail->next);
         }
         int len = 0;
-        for (Node* cur = head; cur; cur = cur->next, len++)
-            assert(len < 10000);	// Consider infinite cycle?
+        for (Node *cur = head; cur; cur = cur->next, len++)
+            assert(len < 10000); // Consider infinite cycle?
         assert(length == len);
         // assert(length == (int)debug_data.size());
     }
 
-    void print() {
-        Node* temp_head = head;
-        while (temp_head != nullptr) {
+    void print()
+    {
+        Node *temp_head = head;
+        while (temp_head != nullptr)
+        {
             std::cout << temp_head->data << " ";
             temp_head = temp_head->next;
         }
@@ -61,13 +72,15 @@ public:
         std::cout << "the current length is :" << length << "\n";
     }
 
-    LinkedList(const LinkedList&) = delete;
-    LinkedList& operator=(const LinkedList&) = delete;
+    LinkedList(const LinkedList &) = delete;
+    LinkedList &operator=(const LinkedList &) = delete;
 
-    void insert_front(int val) {
+    void insert_front(int val)
+    {
         length++;
-        Node* node = new Node(val);
-        if (head == nullptr) {
+        Node *node = new Node(val);
+        if (head == nullptr)
+        {
             head = tail = node;
             return;
         }
@@ -75,22 +88,29 @@ public:
         head = node;
     }
 
-    void delete_next(Node* node) {
-        if (!head || !node || !node->next) return;
-        Node* temp = node->next;
+    void delete_next(Node *node)
+    {
+        if (!head || !node || !node->next)
+            return;
+        length--;
+        Node *temp = node->next;
         node->next = node->next->next;
         delete temp;
-        if (!node->next) tail = head;
+        if (!node->next)
+            tail = head;
     }
 
-    void delete_even_position() {
-        for (Node* temp = head; temp; temp = temp->next)
+    void delete_even_position()
+    {
+        for (Node *temp = head; temp; temp = temp->next)
             delete_next(temp);
     }
 
-    ~LinkedList() {
-        while (head != nullptr) {
-            Node* temp_head = head;
+    ~LinkedList()
+    {
+        while (head != nullptr)
+        {
+            Node *temp_head = head;
             head = head->next;
             delete temp_head;
         }
@@ -98,7 +118,8 @@ public:
     }
 };
 
-int main() {
+int main()
+{
     LinkedList list1;
 
     list1.insert(1);
