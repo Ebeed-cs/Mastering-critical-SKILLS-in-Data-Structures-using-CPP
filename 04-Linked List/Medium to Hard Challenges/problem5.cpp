@@ -198,4 +198,112 @@ public:
             cur = after;
         }
         before_begin->next->next = cur;
-        before_begin->next = pr
+        before_begin->next = prev;
+    }
+
+    void reverse_chains(int k) {
+        if (!head || k > length || k <= 0)   return;
+        insert_front(-1234);
+        int count = 0;
+        Node* before_begin = head;
+        while (count <= (length - 1 - k)) {
+            Node* temp = before_begin;
+            before_begin = before_begin->next;
+            reverse_part(temp, k);
+            count += k;
+        }
+        delete_front();
+        while (before_begin->next) before_begin = before_begin->next;
+        tail = before_begin;
+        debug_verify_data_integrity();
+    }
+
+};
+
+
+void test1()
+{
+    cout << "\n\ntest1\n";
+    LinkedList list;
+
+    list.insert_end(1);
+    list.insert_end(2);
+    list.insert_end(3);
+    list.insert_end(4);
+    list.insert_end(5);
+    list.insert_end(6);
+    list.reverse_chains(6);
+    // some actions
+    list.print();
+
+    string expected = "6 5 4 3 2 1";
+    string result = list.debug_to_string();
+    if (expected != result)
+    {
+        cout << "no match:\nExpected: " << expected << "\nResult  : " << result << "\n";
+        assert(false);
+    }
+    list.debug_print_list("********");
+}
+
+void test2()
+{
+    cout << "\n\ntest2\n";
+    LinkedList list;
+
+    list.insert_end(1);
+    list.insert_end(2);
+    list.insert_end(3);
+    list.insert_end(4);
+    list.insert_end(5);
+    list.insert_end(6);
+    list.reverse_chains(3);
+    // some actions
+    list.print();
+
+    string expected = "3 2 1 6 5 4";
+    string result = list.debug_to_string();
+    if (expected != result)
+    {
+        cout << "no match:\nExpected: " << expected << "\nResult  : " << result << "\n";
+        assert(false);
+    }
+    list.debug_print_list("********");
+}
+
+void test3()
+{
+    cout << "\n\ntest3\n";
+    LinkedList list;
+
+    list.insert_end(1);
+    list.insert_end(2);
+    list.insert_end(3);
+    list.insert_end(4);
+    list.insert_end(5);
+    list.insert_end(6);
+    list.insert_end(7);
+    list.reverse_chains(2);
+    // some actions
+    list.print();
+
+    string expected = "2 1 4 3 6 5 7";
+    string result = list.debug_to_string();
+    if (expected != result)
+    {
+        cout << "no match:\nExpected: " << expected << "\nResult  : " << result << "\n";
+        assert(false);
+    }
+    list.debug_print_list("********");
+}
+
+
+int main() {
+    test1();
+    test2();
+    test3();
+
+    cout << "\n\nNO RTE\n";		// must see it, otherwise RTE
+    return 0;
+}
+
