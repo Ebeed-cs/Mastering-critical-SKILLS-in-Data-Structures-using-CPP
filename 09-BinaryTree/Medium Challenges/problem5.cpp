@@ -12,14 +12,14 @@ using namespace std;
 class BinaryTree
 {
 private:
-    BinaryTree *left{};
-    BinaryTree *right{};
+    BinaryTree* left{};
+    BinaryTree* right{};
 
-    char last_one(string &str)
+    char last_one(string& str)
     {
-        if (!str)
-            return '';
-        char c str[str.size() - 1];
+        if (str.empty())
+            return '%';
+        char c = str[str.size() - 1];
         str = str.substr(0, str.size() - 1);
         return c;
     }
@@ -30,18 +30,28 @@ public:
 
     BinaryTree(string postfix)
     {
-        data = last_one(postfix);
-        if (postfix.size() == 0)
-            return;
+        std::stack<BinaryTree*> tree;
+        for (int i = 0; i < postfix.size(); ++i) {
+            BinaryTree* cur = new BinaryTree(postfix[i]);
 
-        right = new BinaryTree(last_one(postfix));
-        left->BinaryTree(postfix);
+            if (!isdigit(postfix[i])) {
+                cur->right = tree.top();
+                tree.pop();
+                cur->left = tree.top();
+                tree.pop();
+            }
+            tree.push(cur);
+        }
+        BinaryTree* root = tree.top();
+        this->data = root->data;
+        this->right = root->right;
+        this->left = root->left;
     }
 
     void add(vector<int> values, vector<char> direction)
     {
         assert(values.size() == direction.size());
-        BinaryTree *current = this;
+        BinaryTree* current = this;
         for (int i = 0; i < (int)values.size(); ++i)
         {
             if (direction[i] == 'L')
@@ -70,6 +80,15 @@ public:
         cout << data << " ";
         if (right)
             right->print_inorder();
+    }
+
+    void print_postorder()
+    {
+        if (left)
+            left->print_postorder();
+        if (right)
+            right->print_postorder();
+        cout << data << " ";
     }
 
     void clear()
@@ -105,8 +124,8 @@ public:
 };
 int main()
 {
-    BinaryTree root("23+4*");
-    root->print_inorder();
+    BinaryTree root("523*+");
+    root.print_postorder();
     cout << "\n\nNO RTE\n";
     return 0;
 }
